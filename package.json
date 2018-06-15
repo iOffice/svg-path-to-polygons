@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Phrogz/svg-path-to-polygons#readme",
   "dependencies": {
+    "svg-arc-to-cubic-bezier": "^3.0.0",
     "svg-path-parser": "^1.1.0"
   },
   "devDependencies": {

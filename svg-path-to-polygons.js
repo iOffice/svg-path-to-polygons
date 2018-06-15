@@ -3,6 +3,7 @@ module.exports = {
 	compare:compare
 };
 const { parseSVG, makeAbsolute } = require('svg-path-parser');
+const arcToBezier = require('svg-arc-to-cubic-bezier');
 
 function svgPathToPolygons(svgPathString, opts={}) {
 	if (!opts.tolerance) opts.tolerance=1;
@@ -42,6 +43,12 @@ function svgPathToPolygons(svgPathString, opts={}) {
 				sampleCubicBézier(cmd.x0,cmd.y0,x1,y1,cmd.x2,cmd.y2,cmd.x,cmd.y);
 				add(cmd.x,cmd.y);
 			break;
+
+            case 'A':
+                const curves = arcToBezier(cmd.x0, cmd.y0, cmd.x, cmd.y, cmd.rx, cmd.ry, cmd.xAxisRotation, cmd.largeArc, cmd.sweep);
+                curves.forEach(curve => sampleCubicBézier(curve.x1, curve.y1, curve.x2, curve.y2, curve.x, curve.y));
+                add(cmd.x, cmd.y);
+            break;
 
 			default:
 				console.error('Our deepest apologies, but '+cmd.command+' commands ('+cmd.code+') are not yet supported.');
